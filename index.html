@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>U-F-O.js</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			* { 
+				margin: 0; 
+				padding: 0;
+			}
+
+			body, html { 
+				height:100%; 
+			}
+			
+			progress {
+				background-color: #f3f3f3;
+				border: 0;
+				height: 18px;
+				border-radius: 9px;
+			}
+			
+			
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+
+		<script src="./build/three.js"></script>
+		<script src="js/shaders/ConvolutionShader.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/FilmShader.js"></script>
+		<script src="js/shaders/FXAAShader.js"></script>
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/postprocessing/BloomPass.js"></script>
+		<script src="js/postprocessing/FilmPass.js"></script>
+		<script src="./js/loaders/OBJLoader.js"></script>
+		<script src="./js/loaders/MTLLoader.js"></script>
+		<script src="./js/loaders/DDSLoader.js"></script>
+		<script src="./js/controls/OrbitControls.js"></script>
+		<script src="./js/libs/stats.min.js"></script>
+		<script src="js/modifiers/SimplifyModifier.js"></script>
+		<script src="./waveform.js"></script>
+		<script src="./main.js"></script>
+	</body>
+</html>
