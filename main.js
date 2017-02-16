@@ -1,3 +1,11 @@
+/*
+					Astéroïde 
+	A music-based game of dodging wireframe asteroids
+	
+	By Sam Lynch
+*/
+console.log('%c** Astéroïde v0.1.0 **', 'background: #FF1493; color: #FFFFFF');
+console.log('%c  ** By Sam Lynch **  ', 'background: #FF1493; color: #FFFFFF');
 
 var astrode = new function(){
 
@@ -81,80 +89,50 @@ var astrode = new function(){
 	{
 		var modifer = new THREE.SimplifyModifier();
 		var loader = new THREE.TextureLoader();
-		loader.load("/asteroid.jpg", function(texture){
-
-			var objLoader = new THREE.OBJLoader();
-			objLoader.setPath( 'obj/asteroid/' );
-			objLoader.load( 'Rock_Reduced.obj', function ( object ) {
-				var material = new THREE.MeshBasicMaterial({color: 0xFF00000, wireframe:true});
-				object.traverse(function(child) {
-					if (child instanceof THREE.Mesh){
-						child.material = material;
-					}
-				});
-				object.scale.set(19,19,19);
-				object.position.z += 8;
-				asteroidPrefab = object;
-				
-				
-				objLoader.setPath( 'obj/ship/' );
-				/*
-				objLoader.load( 'TIE-fighter.obj', function ( object2 ) 
+		var objLoader = new THREE.OBJLoader();
+		objLoader.setPath( 'obj/asteroid/' );
+		objLoader.load( 'Rock_Reduced.obj', function ( object ) 
+		{
+			var material = new THREE.MeshBasicMaterial({color: 0xFF00000, wireframe:true});
+			object.traverse(function(child) 
+			{
+				if (child instanceof THREE.Mesh)
 				{
-					material = new THREE.MeshLambertMaterial();
-					object2.traverse(function(child) 
-					{
-						if (child instanceof THREE.Mesh)
-						{
-							child.material = material;
-						}
-					});
-					shipPrefab = object2;
-					*/			
-					//loader.load("/test.jpg", function(skyboxTex)
-					//{
-						var geometry = new THREE.SphereGeometry(3000, 60, 40);  
-						//var uniforms = 
-						//{  
-						//	 texture: { type: 't', value: skyboxTex }
-						//};
+					child.material = material;
+				}
+			});
+			object.scale.set(19,19,19);
+			object.position.z += 8;
+			asteroidPrefab = object;
+			
+			
+			objLoader.setPath( 'obj/ship/' );
+			var geometry = new THREE.SphereGeometry(3000, 60, 40);  
 
-						var material = new THREE.MeshBasicMaterial( 
-						{  
-							//uniforms:       uniforms,
-							//vertexShader:   document.getElementById('skyvert').textContent,
-							//fragmentShader: document.getElementById('skyfrag').textContent,
-							color: 0x333333,
-							wireframe:true
-						});
+			var material = new THREE.MeshBasicMaterial( 
+			{  
+				color: 0x333333,
+				wireframe:true
+			});
 
-						skyBox = new THREE.Mesh(geometry, material);  
-						skyBox.scale.set(-1, 1, 1);  
-						skyBox.rotation.order = 'XZY';  
-						skyBox.renderDepth = 1000.0;  
-						skyBox.name = "Skybox";
-						g_Skybox = skyBox;
-						
-						listener = new THREE.AudioListener();
-						music = new THREE.Audio( listener );
-						var audioLoader = new THREE.AudioLoader();
-						audioLoader.load( 'music/bgm.mp3', function( buffer ) 
-						{
-							music.setBuffer( buffer );
-							music.setLoop(false);
-							music.setVolume(0.05);
-							init();
-						}, function ( xhr ) {
-							console.log( "AudioLoader: " + Math.floor(xhr.loaded / xhr.total * 100) + '% loaded' );
-						});
-						
-					//});
-					
-				//});
-				
-
-			}, function(){}, function(){} );
-		});
+			skyBox = new THREE.Mesh(geometry, material);  
+			skyBox.scale.set(-1, 1, 1);  
+			skyBox.rotation.order = 'XZY';  
+			skyBox.renderDepth = 1000.0;  
+			skyBox.name = "Skybox";
+			g_Skybox = skyBox;
+			
+			listener = new THREE.AudioListener();
+			music = new THREE.Audio( listener );
+			var audioLoader = new THREE.AudioLoader();
+			audioLoader.load( 'music/bgm.mp3', function( buffer ) 
+			{
+				music.setBuffer( buffer );
+				music.setLoop(false);
+				music.setVolume(0.05);
+				init();
+			}, function ( xhr ) { console.log( "audioLoader: " + Math.floor(xhr.loaded / xhr.total * 100) + '% loaded' ); });
+		}, function(){}, function(){} );
 	}
 
 	function CubeRejigger()
@@ -269,8 +247,13 @@ var astrode = new function(){
 		text2.style.display = "none";
 	}
 
-	function init() {
-
+	function init() 
+	{
+		renderer = new THREE.WebGLRenderer({ antialias: false });
+		renderer.setClearColor( new THREE.Color(0.0,0.0,0.0) );
+		renderer.setPixelRatio( window.devicePixelRatio );
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		
 		text2 = document.createElement('p');
 		text2.style.position = 'absolute';
 		text2.style.width = 300 + 'px';
@@ -325,16 +308,11 @@ var astrode = new function(){
 		player.position.x = 0;
 		player.position.y = -110;
 		player.position.z = 0;
-		//player.scale.set(0.2, 0.2, 0.2);  
 		player.scale.set(12, 12, 12);  
 		player.rotation.x = 1.6;
 		player.boundingBox = new THREE.Box3().setFromObject(player);
 		scene.add(player);
-
-		renderer = new THREE.WebGLRenderer({ antialias: false });
-		renderer.setClearColor( new THREE.Color(0.0,0.0,0.0) );
-		renderer.setPixelRatio( window.devicePixelRatio );
-		renderer.setSize( window.innerWidth, window.innerHeight );
+		
 		var container = document.getElementById( 'container' );
 		container.appendChild( renderer.domElement );
 
@@ -350,8 +328,6 @@ var astrode = new function(){
 			//controls = new THREE.OrbitControls( camera, renderer.domElement );
 		
 		camera.add( listener );
-		//progressUpdateTimer = setInterval(updateProgress, 1000);
-		//music.play();
 
 		light = new THREE.AmbientLight( 0x666666 );
 		scene.add( light );
@@ -395,11 +371,12 @@ var astrode = new function(){
 
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		
-		var vFOV = camera.fov * Math.PI / 180;        // convert vertical fov to radians
-		var height = 2 * Math.tan( vFOV / 2 ) * camera.position.z; // visible height
+		// We need it in radians
+		var vFOV = camera.fov * Math.PI / 180; 
+		var height = 2 * Math.tan( vFOV / 2 ) * camera.position.z; 
 
 		var aspect = window.innerWidth / window.innerHeight;
-		scrWidth = height * aspect;                  // visible width
+		scrWidth = height * aspect;  
 		waveform2.mesh.position.x = scrWidth*0.6;
 		waveform.mesh.position.x = -scrWidth*0.6;
 	}
@@ -438,16 +415,12 @@ var astrode = new function(){
 			box[i].position.y -= (difficulty);
 			if(box[i].position.y < -240) 
 			{
-				//box[i].position.y = 240;
 				box[i].move();
 			}
 			
-			//box[i].rotateOnAxis(box[i].angularVelocity, 0.1);
 			box[i].rotation.x += box[i].angularVelocity.x;
 			box[i].rotation.y += box[i].angularVelocity.y;
 			box[i].rotation.z += box[i].angularVelocity.z;
-			
-			//box[i].bboxHelper.update(box[i]);
 			
 			box[i].boundingBox.setFromObject(box[i]);
 			if(box[i].inactive == false && player.boundingBox.intersectsBox(box[i].boundingBox) == true)
