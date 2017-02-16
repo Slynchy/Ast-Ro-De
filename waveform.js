@@ -45,8 +45,8 @@ WVFRM.setup = function() {
 	WVFRM.javascriptProcessor.connect(WVFRM.audioContext.destination);  
 }
 
-WVFRM.playSound = function (buffer) {
-	WVFRM.sourceBuffer.buffer = buffer;
+WVFRM.playSound = function (buff) {
+	WVFRM.sourceBuffer.buffer = buff;
 	WVFRM.sourceBuffer.loop = false;
 	WVFRM.isPlaying = true;
 	WVFRM.sourceBuffer.start(0);

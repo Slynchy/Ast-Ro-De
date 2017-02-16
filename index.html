@@ -5,14 +5,11 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
-			* { 
-				margin: 0; 
-				padding: 0;
-			}
+			* { margin:0; padding:0; } /* to remove the top and left whitespace */
 
-			body, html { 
-				height:100%; 
-			}
+			html, body { width:100%; height:100%; } 
+
+			canvas { display:block; }
 			
 			progress {
 				background-color: #f3f3f3;
@@ -21,11 +18,74 @@
 				border-radius: 9px;
 			}
 			
+			#inner {
+				width: 25%;
+				height: 25%;
+				margin: auto; 
+				display: none;
+				font-size: xx-large; 
+				font-size: 2vw;
+				text-align: center;
+				position: absolute;
+				color: white;
+				border: 3px solid black;
+				left: 37.5%;
+				top: 40%;
+				/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#959595+0,0d0d0d+46,010101+50,0a0a0a+53,4e4e4e+76,383838+87,1b1b1b+100;Black+Gloss+Pipe */
+				background: #959595; /* Old browsers */
+				background: -moz-linear-gradient(top, #959595 0%, #0d0d0d 46%, #010101 50%, #0a0a0a 53%, #4e4e4e 76%, #383838 87%, #1b1b1b 100%); /* FF3.6-15 */
+				background: -webkit-linear-gradient(top, #959595 0%,#0d0d0d 46%,#010101 50%,#0a0a0a 53%,#4e4e4e 76%,#383838 87%,#1b1b1b 100%); /* Chrome10-25,Safari5.1-6 */
+				background: linear-gradient(to bottom, #959595 0%,#0d0d0d 46%,#010101 50%,#0a0a0a 53%,#4e4e4e 76%,#383838 87%,#1b1b1b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#959595', endColorstr='#1b1b1b',GradientType=0 ); /* IE6-9 */
+			}
 			
+			button {
+				display: inline-block;
+				margin: 0 10px 0 0;
+				padding: 15px 45px;
+				font-size: xx-large; 
+				font-size: 2vw;
+				font-family: "Bitter",serif;
+				line-height: 1.8;
+				appearance: none;
+				box-shadow: none;
+				border-radius: 0;
+			}
+
+			button:focus {
+				outline: none
+			}
+			
+			section.press button {
+				color: #fff;
+				background-color: #6B6B6B;
+				border: none;
+				border-radius: 15px;
+				box-shadow: 0 10px #332F2E;
+			}
+
+			section.press button:hover,
+			section.press button.hover {
+				background-color: #827775
+			}
+
+			section.press button:active,
+			section.press button.active {
+				background-color: #857B77;
+				box-shadow: 0 5px #332F2E;
+				transform: translateY(5px);
+			}
 		</style>
 	</head>
 	<body>
-		<div id="container"></div>
+		<div id="container">
+			<div id="inner">
+				<br>You scored: <br><a id="finalScore">0</a><br>
+				<section class="press">
+					<button onClick="window.location.reload()">Play again</button>
+				</section>
+			</div>
+		</div>
 
 		<script src="./build/three.js"></script>
 		<script src="js/shaders/ConvolutionShader.js"></script>

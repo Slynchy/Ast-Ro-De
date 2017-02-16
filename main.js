@@ -7,6 +7,8 @@ const sizecrid = 25;
 // Pointer to skybox
 var g_Skybox;
 
+var gameOver = false;
+
 // Player pointer
 var player;
 var score = 0;
@@ -88,7 +90,8 @@ function LoadMDL()
 			
 			
 			objLoader.setPath( 'obj/ship/' );
-	/*				objLoader.load( 'TIE-fighter.obj', function ( object2 ) 
+			/*
+			objLoader.load( 'TIE-fighter.obj', function ( object2 ) 
 			{
 				material = new THREE.MeshLambertMaterial();
 				object2.traverse(function(child) 
@@ -99,7 +102,7 @@ function LoadMDL()
 					}
 				});
 				shipPrefab = object2;
-	*/			
+				*/			
 				//loader.load("/test.jpg", function(skyboxTex)
 				//{
 					var geometry = new THREE.SphereGeometry(3000, 60, 40);  
@@ -190,7 +193,6 @@ function updateProgress(_time)
 {
 	progress.value = _time;
 	
-	
 	if(WVFRM.PREV_TIME == Math.floor(_time)) return;
 	
 	WVFRM.PREV_TIME = Math.floor(_time);
@@ -223,7 +225,40 @@ function updateProgress(_time)
 			difficulty *= 1.4;
 			g_Skybox.material.color.b = 1.0;
 			break;
+		case 134:
+			difficulty *= 0.5;
+			stopOnslaught = true;
+			break;
+		case 140:
+			stopOnslaught = false;
+			break;
+		case 153:
+			difficulty *= 1.4;
+			g_Skybox.material.color.b = 1.0;
+			break;
+		case 179:
+			difficulty *= 0.5;
+			stopOnslaught = true;
+			break;
+		case 184:
+			stopOnslaught = false;
+			break;
+		case 196:
+			stopOnslaught = true;
+			break;
+		case 200:
+			GameOver();
+			break;
 	}
+}
+
+function GameOver()
+{
+	stopOnslaught = true;
+	gameOver = true;
+	document.getElementById("finalScore").innerHTML = text2.innerHTML;
+	document.getElementById("inner").style.display = "inline-block";
+	text2.style.display = "none";
 }
 
 function init() {
@@ -280,7 +315,7 @@ function init() {
 	var boxtest = new THREE.BoxGeometry( 1, 1, 1 );
 	player = new THREE.Mesh( boxtest, new THREE.MeshBasicMaterial( {color: 0x00ff00, wireframe: true} ) );//shipPrefab.clone();
 	player.position.x = 0;
-	player.position.y = -150;
+	player.position.y = -110;
 	player.position.z = 0;
 	//player.scale.set(0.2, 0.2, 0.2);  
 	player.scale.set(12, 12, 12);  
@@ -304,7 +339,7 @@ function init() {
 	camera.rotation.x = 0.520500576195935;
 	camera.rotation.y = 1.7504505484667145e-15;
 	camera.rotation.z = -1.0034049701963376e-15;
-	controls = new THREE.OrbitControls( camera, renderer.domElement );
+	//controls = new THREE.OrbitControls( camera, renderer.domElement );
 	
 	camera.add( listener );
 	//progressUpdateTimer = setInterval(updateProgress, 1000);
@@ -387,8 +422,11 @@ function animate() {
 		WVFRM.PREV_TIME = Math.floor(WVFRM.audioContext.currentTime);
 	}
 	
-	text2.innerHTML = Math.floor(score += difficulty * 0.1);
-	g_Skybox.rotation.x -= difficulty * (0.004 * DT);
+	if(!gameOver)
+	{
+		text2.innerHTML = Math.floor(score += difficulty * 0.1);
+		g_Skybox.rotation.x -= difficulty * (0.004 * DT);
+	}
 	
 	g_Skybox.material.color.r = lerp(g_Skybox.material.color.r, 0.129411765, DT * 1.6);
 	g_Skybox.material.color.g = lerp(g_Skybox.material.color.g, 0.129411765, DT * 1.6);
