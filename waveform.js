@@ -1,6 +1,4 @@
-
 // Referred alot to https://developer.mozilla.org/en/docs/Web/API/AudioContext
-
 
 var WVFRM = {};
 
@@ -67,24 +65,22 @@ WVFRM.loadSound = function(url) {
 	request.send();
 }
 
-function onError(e) {
-  console.log(e);
+function onError(err) {
+	console.log( err );
 }
 
-WVFRM.updateVertices = function() {
-
-  for (var i = 0; i < WVFRM.amplitudeArray.length; i++) {
-	var value = WVFRM.amplitudeArray[i] * 2;
-	var y = (.01 * value);
+WVFRM.updateVertices = function(waveform, waveform2) {
+	for (var i = 0; i < WVFRM.amplitudeArray.length; i++) {
+		var value = WVFRM.amplitudeArray[i] * 2;
+		var y = (.01 * value);
 		waveform.geom.vertices[i].setX(((5 / WVFRM.amplitudeArray.length) * i) - 2.5);
 		waveform.geom.vertices[i].setY(y);
 		waveform2.geom.vertices[i].setX(((5 / WVFRM.amplitudeArray.length) * i) - 2.5);
 		waveform2.geom.vertices[i].setY(y);
-	/*env.waveform.geom.vertices[i].setZ((Math.random()*Math.abs(y))-(Math.abs(y)/2));*/
-  }
-  waveform.geom.verticesNeedUpdate = true;
-  waveform2.geom.verticesNeedUpdate = true;
-
+		/*env.waveform.geom.vertices[i].setZ((Math.random()*Math.abs(y))-(Math.abs(y)/2));*/
+	}
+	waveform.geom.verticesNeedUpdate = true;
+	waveform2.geom.verticesNeedUpdate = true;
 }
 
 WVFRM.setup();
