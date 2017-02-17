@@ -93,3 +93,31 @@ else
 {
 	WVFRM.playSound(WVFRM.audioData);
 }
+
+var waveform = {
+	geom: new THREE.Geometry(),
+	material: new THREE.LineBasicMaterial({
+		color: 0x3232FF,
+		linejoin: "round",
+		linecap: "square",
+		lights: false
+	})
+}
+
+var waveform2 = {
+	geom: new THREE.Geometry(),
+	material: new THREE.LineBasicMaterial({
+	  color: 0x3232FF,
+	  linejoin: "round",
+	  linecap: "square",
+	  lights: false
+	})
+}
+
+waveform.mesh = new THREE.Line( waveform.geom, waveform.material);
+waveform2.mesh = new THREE.Line( waveform2.geom, waveform2.material);
+
+for(var a = 0; a < 1024; a++){
+	waveform.geom.vertices.push(new THREE.Vector3 ( ( ( 5 / 1024 ) * a ) - 2.5 , 2.5 , 0 ) );
+	waveform2.geom.vertices.push( new THREE.Vector3 ( ( ( 5 / 1024 ) * a ) - 2.5, 2.5, 0 ) );
+}
