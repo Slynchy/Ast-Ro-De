@@ -27,6 +27,17 @@ astrode.GameOver = function()
 	text2.style.display = "none";
 }
 
+astrode.FlashWaves = function(r,g,b)
+{
+	if(astrode.gameOver) return;
+	waveform.material.color.r = r;
+	waveform.material.color.g = g;
+	waveform.material.color.b = b;
+	waveform2.material.color.r = r;
+	waveform2.material.color.g = g;
+	waveform2.material.color.b = b;
+}
+
 astrode.updateProgress = function(_time)
 {
 	progress.value = _time;
@@ -34,6 +45,8 @@ astrode.updateProgress = function(_time)
 	if(WVFRM.PREV_TIME == Math.floor(_time)) return;
 	
 	WVFRM.PREV_TIME = Math.floor(_time);
+	
+	astrode.FlashWaves(Math.random() * difficulty,Math.random() * difficulty,Math.random() * difficulty);
 	
 	switch(Math.floor(_time))
 	{
@@ -232,6 +245,13 @@ astrode.animate = function() {
 	astrode.skyBox.material.color.r = lerp(astrode.skyBox.material.color.r, 0.129411765, astrode.DT * 1.6);
 	astrode.skyBox.material.color.g = lerp(astrode.skyBox.material.color.g, 0.129411765, astrode.DT * 1.6);
 	astrode.skyBox.material.color.b = lerp(astrode.skyBox.material.color.b, 0.129411765, astrode.DT * 1.6);
+	
+	waveform.material.color.r = lerp(waveform.material.color.r, 0.19607843137254902, astrode.DT * 1.1);
+	waveform.material.color.g = lerp(waveform.material.color.g, 0.19607843137254902, astrode.DT * 1.1);
+	waveform.material.color.b = lerp(waveform.material.color.b, 1, astrode.DT * 1.1);
+	waveform2.material.color.r = lerp(waveform2.material.color.r, 0.19607843137254902, astrode.DT * 1.1);
+	waveform2.material.color.g = lerp(waveform2.material.color.g, 0.19607843137254902, astrode.DT * 1.1);
+	waveform2.material.color.b = lerp(waveform2.material.color.b, 1, astrode.DT * 1.1);
 	
 	astrode.player.rotateX(0.005 * difficulty + (Math.random() * 0.05));
 	astrode.player.rotateY(0.005 * difficulty + (Math.random() * 0.05));
