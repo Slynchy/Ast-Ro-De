@@ -118,7 +118,7 @@ astrode.init = function()
 	progress.style.height = 300;
 	progress.value = 0;
 	progress.style.textAlign="center";
-	progress.max = 203;
+	progress.max = 200;
 	progress.style.left = "32.5%";
 	progress.style.top = 90 + 'px';
 	document.body.appendChild(progress);
@@ -146,10 +146,15 @@ astrode.init = function()
 		astrode.scene.add(astrode.ASTEROIDS[i]);
 	}
 	
+	astrode.skyBox = new THREE.Mesh(new THREE.SphereGeometry(3000, 60, 40), new THREE.MeshBasicMaterial({ color: 0x333333,wireframe:true}));  
+	astrode.skyBox.scale.set(-1, 1, 1);  
+	astrode.skyBox.rotation.order = 'XZY';  
+	astrode.skyBox.renderDepth = 1000.0;  
+	astrode.skyBox.name = "Skybox";
 	astrode.scene.add(astrode.skyBox);  
 	
 	var boxtest = new THREE.DodecahedronGeometry( 1, 0 );
-	astrode.player = new THREE.Mesh( boxtest, new THREE.MeshBasicMaterial( {color: 0x00ff00, wireframe: true} ) );//shipPrefab.clone();
+	astrode.player = new THREE.Mesh( boxtest, new THREE.MeshBasicMaterial( {color: 0x00ff00, wireframe: true} ) );
 	astrode.player.position.x = 0;
 	astrode.player.position.y = -110;
 	astrode.player.position.z = 0;
@@ -169,7 +174,7 @@ astrode.init = function()
 	astrode.camera.rotation.y = 1.7504505484667145e-15;
 	astrode.camera.rotation.z = -1.0034049701963376e-15;
 	// Uncomment this to get orbital mouse control
-		//controls = new THREE.OrbitControls( camera, renderer.domElement );
+		//controls = new THREE.OrbitControls( astrode.camera, astrode.renderer.domElement );
 	
 	astrode.camera.add( astrode.listener );
 
@@ -228,12 +233,10 @@ astrode.animate = function() {
 	astrode.skyBox.material.color.g = lerp(astrode.skyBox.material.color.g, 0.129411765, astrode.DT * 1.6);
 	astrode.skyBox.material.color.b = lerp(astrode.skyBox.material.color.b, 0.129411765, astrode.DT * 1.6);
 	
-	//player.boundingBox.setFromObject(player);
-	
 	astrode.player.rotateX(0.005 * difficulty + (Math.random() * 0.05));
 	astrode.player.rotateY(0.005 * difficulty + (Math.random() * 0.05));
 	astrode.player.rotateZ(0.005 * difficulty + (Math.random() * 0.05));
-	astrode.player.boundingBox.setFromCenterAndSize(astrode.player.position, new THREE.Vector3( 10, 10, 55 ));
+	astrode.player.boundingBox.setFromCenterAndSize(astrode.player.position, new THREE.Vector3( 12, 12, 185 ));
 	difficulty+= (0.0025);
 	if(difficulty > 15) difficulty = 15;
 	for(i = 0; i < NUM_OF_ASTEROIDS; i++)
@@ -268,13 +271,13 @@ astrode.animate = function() {
 	}
 	if(astrode.controls.aButton == true)
 	{
-		if(player.position.x > -scrWidth/2.4)
-			player.position.x -= 450 * astrode.DT;
+		if(astrode.player.position.x > -astrode.scrWidth/2.4)
+			astrode.player.position.x -= 450 * astrode.DT;
 	}
 	if(astrode.controls.dButton == true)
 	{
-		if(player.position.x < scrWidth/2.4)
-			player.position.x += 450 * astrode.DT;
+		if(astrode.player.position.x < astrode.scrWidth/2.4)
+			astrode.player.position.x += 450 * astrode.DT;
 	}
 
 	astrode.renderer.render( astrode.scene, astrode.camera );
