@@ -8,6 +8,9 @@ astrode.controls.forward;
 
 astrode.score = 0;
 
+astrode.collisionSFX = new Audio('./sfx/collide.ogg');
+astrode.collisionSFX.preload = true;
+
 // Amount of asteroids
 const NUM_OF_ASTEROIDS = 25;
 
@@ -38,6 +41,19 @@ astrode.FlashWaves = function(r,g,b)
 	waveform2.material.color.b = b;
 }
 
+var flashBack = false;
+
+astrode.FlashBackground = function(r,g,b)
+{
+	if(astrode.gameOver) return;
+	astrode.skyBox.material.color.r = r;
+	astrode.skyBox.material.color.g = g;
+	astrode.skyBox.material.color.b = b;
+	astrode.skyBox.material.color.r = r;
+	astrode.skyBox.material.color.g = g;
+	astrode.skyBox.material.color.b = b;
+}
+
 astrode.updateProgress = function(_time)
 {
 	progress.value = _time;
@@ -48,15 +64,19 @@ astrode.updateProgress = function(_time)
 	
 	astrode.FlashWaves(Math.random() * difficulty,Math.random() * difficulty,Math.random() * difficulty);
 	
+	if(flashBack) astrode.FlashBackground((Math.random() * difficulty) * 0.1, (Math.random() * difficulty) * 0.1, (Math.random() * difficulty) * 0.1);
+	
 	switch(Math.floor(_time))
 	{
 		case 23:
 			difficulty *= 1.4;
 			astrode.skyBox.material.color.b = 1.0;
+			flashBack = true;
 			break;
 		case 48:
 			difficulty *= 0.5;
 			astrode.stopOnslaught = true;
+			flashBack = false;
 			break;
 		case 54:
 			astrode.stopOnslaught = false;
@@ -64,10 +84,12 @@ astrode.updateProgress = function(_time)
 		case 67:
 			difficulty *= 1.4;
 			astrode.skyBox.material.color.b = 1.0;
+			flashBack = true;
 			break;
 		case 93:
 			difficulty *= 0.5;
 			astrode.stopOnslaught = true;
+			flashBack = false;
 			break;
 		case 99:
 			astrode.stopOnslaught = false;
@@ -75,10 +97,12 @@ astrode.updateProgress = function(_time)
 		case 110:
 			difficulty *= 1.4;
 			astrode.skyBox.material.color.b = 1.0;
+			flashBack = true;
 			break;
 		case 134:
 			difficulty *= 0.5;
 			astrode.stopOnslaught = true;
+			flashBack = false;
 			break;
 		case 140:
 			astrode.stopOnslaught = false;
@@ -86,10 +110,12 @@ astrode.updateProgress = function(_time)
 		case 153:
 			difficulty *= 1.4;
 			astrode.skyBox.material.color.b = 1.0;
+			flashBack = true;
 			break;
 		case 179:
 			difficulty *= 0.5;
 			astrode.stopOnslaught = true;
+			flashBack = false;
 			break;
 		case 184:
 			astrode.stopOnslaught = false;
@@ -106,7 +132,7 @@ astrode.updateProgress = function(_time)
 astrode.init = function()
 {
 	astrode.renderer = new THREE.WebGLRenderer({ antialias: false });
-	astrode.renderer.setClearColor( new THREE.Color(0.0,0.0,0.0) );
+	astrode.renderer.setClearColor( new THREE.Color(0,0,0) );
 	astrode.renderer.setPixelRatio( window.devicePixelRatio );
 	astrode.renderer.setSize( window.innerWidth, window.innerHeight );
 	
@@ -154,6 +180,13 @@ astrode.init = function()
 			this.position.x = (-30 * (Math.floor(NUM_OF_ASTEROIDS/2))) + 30 * i;
 			this.position.y = 700 + (Math.random() * 200 - 100);
 			this.inactive = false;
+			astrode.ASTEROIDS[i].traverse(function(child) 
+			{
+				if (child instanceof THREE.Mesh)
+				{
+					child.visible = true;
+				}
+			});
 		};
 		astrode.ASTEROIDS[i].inactive = false;
 		astrode.scene.add(astrode.ASTEROIDS[i]);
@@ -216,7 +249,7 @@ astrode.init = function()
 
 	setInterval( function() {
 
-		WVFRM.analyser.getByteTimeDomainData(WVFRM.amplitudeArray);
+		WVFRM.anal.getByteTimeDomainData(WVFRM.ampArray);
 		if (WVFRM.isPlaying == true) {
 			WVFRM.updateVertices(waveform,waveform2);
 		}
@@ -230,10 +263,10 @@ astrode.animate = function() {
 	
 	astrode.DT = astrode.clock.getDelta();
 	
-	if(Math.floor(WVFRM.audioContext.currentTime) != WVFRM.PREV_TIME)
+	if(Math.floor(astrode.music.context.currentTime) != WVFRM.PREV_TIME)
 	{
-		astrode.updateProgress(WVFRM.audioContext.currentTime);
-		WVFRM.PREV_TIME = Math.floor(WVFRM.audioContext.currentTime);
+		astrode.updateProgress(astrode.music.context.currentTime);
+		WVFRM.PREV_TIME = Math.floor(astrode.music.context.currentTime);
 	}
 	
 	if(!astrode.gameOver)
@@ -256,7 +289,8 @@ astrode.animate = function() {
 	astrode.player.rotateX(0.005 * difficulty + (Math.random() * 0.05));
 	astrode.player.rotateY(0.005 * difficulty + (Math.random() * 0.05));
 	astrode.player.rotateZ(0.005 * difficulty + (Math.random() * 0.05));
-	astrode.player.boundingBox.setFromCenterAndSize(astrode.player.position, new THREE.Vector3( 12, 12, 185 ));
+	//astrode.player.boundingBox.setFromCenterAndSize(astrode.player.position, new THREE.Vector3( 12, 12, 185 ));
+	astrode.player.boundingBox.setFromObject(astrode.player);
 	difficulty+= (0.0025);
 	if(difficulty > 15) difficulty = 15;
 	for(i = 0; i < NUM_OF_ASTEROIDS; i++)
@@ -281,6 +315,14 @@ astrode.animate = function() {
 			astrode.skyBox.material.color.g = 0;
 			astrode.skyBox.material.color.b = 0;
 			console.log("hit!");
+			astrode.collisionSFX.play();
+			astrode.ASTEROIDS[i].traverse(function(child) 
+			{
+				if (child instanceof THREE.Mesh)
+				{
+					child.visible = false;
+				}
+			});
 		};
 	}
 	

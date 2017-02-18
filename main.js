@@ -4,7 +4,7 @@
 	
 	By Sam Lynch
 */
-console.log('%c** Astéroïde v0.2.1 **', 'background: #FF1493; color: #FFFFFF');
+console.log('%c** Astéroïde v0.3.0 **', 'background: #FF1493; color: #FFFFFF');
 console.log('%c  ** By Sam Lynch **  ', 'background: #FF1493; color: #FFFFFF');
 
 // Initial difficulty
@@ -14,6 +14,7 @@ var difficulty = 2;
 var text2;
 var progress;
 
+// This function loads the asteroid object and initializes loading the BGM 
 function LoadResources()
 {
 	var loader = new THREE.TextureLoader();
